@@ -13,3 +13,19 @@ wet_season_months:
 - 12
 - 3
 rain_year_start_month: 6
+classes:
+  1:
+    name: Dense bush
+    color: '#1b5e20'
+  2:
+    name: Open bush / shrub savanna
+    color: '#8bc34a'
+  3:
+    name: Grassland / open
+    color: '#e8d98a'
+  4:
+    name: Bare / disturbed ground
+    color: '#a1795a'
+  5:
+    name: Built-up
+    color: '#d32f2f'

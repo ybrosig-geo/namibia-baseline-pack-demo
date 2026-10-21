@@ -83,3 +83,13 @@ def restrend(df, ndvi_col="ndvi_mean", rain_col="rain_mm"):
     resid = df[ndvi_col] - (fit.intercept + fit.slope * df[rain_col])
     return {"ndvi_vs_rain_r2": fit.rvalue ** 2, "ndvi_vs_rain_p": fit.pvalue,
             **{f"residual_{k}": v for k, v in trend_stats(df.index, resid).items()}}, resid
+
+
+def point_series(annual, lon, lat, scale=30):
+    """Yearly NDVI and clear-obs count at one point -> DataFrame (for checking hotspots)."""
+    pt = ee.Geometry.Point([lon, lat])
+    def f(img):
+        v = img.select(["NDVI", "n_obs"]).reduceRegion(ee.Reducer.first(), pt, scale)
+        return ee.Feature(None, {"year": img.get("year"), "ndvi": v.get("NDVI"), "n_obs": v.get("n_obs")})
+    feats = ee.FeatureCollection(annual.map(f)).getInfo()["features"]
+    return pd.DataFrame([x["properties"] for x in feats]).sort_values("year").set_index("year")

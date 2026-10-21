@@ -225,3 +225,5 @@ outputs/
 *.tiff
 *.zip
 .ipynb_checkpoints/
+*.gpkg-wal
+*.gpkg-shm
