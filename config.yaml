@@ -1,9 +1,15 @@
-# Central settings: change here, not in code
-epsg: 32733            # WGS 84 / UTM zone 33S
+epsg: 32733
 aoi_file: data/vector/aoi.gpkg
 buffer_m: 2000
 current_year: 2025
-trend_years: [2016, 2025]
+trend_years:
+- 2016
+- 2025
 disturbance_reference_year: 2016
-dry_season_months: [7, 10]
-wet_season_months: [1, 4]
+dry_season_months:
+- 6
+- 9
+wet_season_months:
+- 12
+- 3
+rain_year_start_month: 6
