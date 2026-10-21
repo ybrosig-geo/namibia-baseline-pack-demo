@@ -218,3 +218,10 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Baseline Pack
+outputs/
+*.tif
+*.tiff
+*.zip
+.ipynb_checkpoints/

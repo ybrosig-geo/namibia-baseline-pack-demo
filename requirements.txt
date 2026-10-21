@@ -1,0 +1,8 @@
+earthengine-api
+geemap
+geopandas
+pandas
+numpy
+rasterio
+openpyxl
+pyyaml
