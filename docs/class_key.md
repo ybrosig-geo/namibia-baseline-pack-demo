@@ -1,32 +1,28 @@
 # Land-cover class key (reference year 2025)
 
 Woody canopy cover = share of ground covered by tree and shrub crowns seen from above,
-judged visually on high-resolution imagery. Height is not distinguished.
+judged visually on high-resolution imagery and 2025 Sentinel-2 false colour. Height is not distinguished.
 
 | ID | Class | Definition |
 |---|---|---|
 | 1 | Closed woody vegetation | Woody canopy >= 70%; crowns nearly continuous, little or no ground visible. Thickets, hill slopes, drainage lines; often includes taller trees. |
 | 2 | Bush savanna | Woody canopy 10-70%; distinct shrubs/trees with ground or grass visible between them. Most encroached rangeland. |
-| 3 | Grassland / open | Woody canopy < 10% and ground mostly covered by herbaceous vegetation in the wet season (red in the wet 2025 false colour). Includes cleared blocks where grass has re-established. |
-| 4 | Bare / disturbed ground | Woody canopy < 10% and mostly exposed soil or rock even in the wet season (grey/beige/white in the wet 2025 false colour): quarries, construction, fresh clearing, wide gravel areas, pan floors. |
-| 5 | Built-up | Buildings, paved surfaces and yards. |
+| 3 | Open land (grass or bare) | Woody canopy < 10%: grassland, sparse grass, exposed soil or rock, cleared ground, pans, wide gravel areas. |
+| 4 | Built-up | Buildings, paved surfaces and yards. |
 
-## Decision rules for edge cases
-- Scattered tall trees in grass: count their crowns; if total canopy < 10% -> Grassland / open.
-- Cleared block with resprouting shrubs: judge the canopy as it is now (2025), not before clearing.
-- Grass vs bare is decided on the wet-season (Dec 2024-Mar 2025) image, never on the dry season alone.
-- Pans: grass-covered in the wet season -> Grassland / open; otherwise -> Bare.
-- Paved roads in town -> Built-up; gravel tracks narrower than ~10 m are not mapped as a class.
-- Mixed areas: assign the class covering the majority of the area being judged.
+## Decision rules
+- Scattered trees in open land: count their crowns; total canopy < 10% -> Open land.
+- Cleared blocks: judged as they are in 2025, not before clearing.
+- Paved roads in town -> Built-up; gravel tracks narrower than ~10 m are not mapped separately.
+- Mixed areas: the class covering the majority of the area being judged.
 
 ## Excluded on purpose
-- Water: pans are seasonal and dry most of the year; surface water is mapped separately as occurrence (pack item 4).
+- Water: pans are seasonal; surface water is mapped separately as occurrence (pack item 4).
 - Cropland / irrigated land: none present in the AOI in 2025.
-- Woodland (tall trees) as its own class: not reliably separable from dense bush at 10 m.
+- Tall-tree woodland as its own class: not reliably separable from dense bush at 10 m.
 
 ## Change log
-- 2026-10-22: Class 1 threshold raised from 40% to 70% (closed woody vegetation) and class 2 widened to 10-70%, to match how training areas were actually interpreted.
-
-## Change log
-- 2026-10-22: Class 1 threshold raised from 40% to 70% (closed woody vegetation) and class 2 widened to 10-70%, to match how training areas were actually interpreted.
-- 2026-10-22: Grassland vs bare redefined by wet-season vegetation cover; classes 3 and 4 re-digitised.
+- 2026-10-22: Class 1 threshold raised from 40% to 70% and class 2 widened to 10-70%, to match how training areas were interpreted.
+- 2026-10-22: Grassland and bare ground were digitised separately but merged into 'Open land'. Their wet-season NDVI overlapped strongly
+  (grassland polygons 0.18-0.37, bare 0.08-0.24), so they were not reliably separable at 10 m. Original labels are kept in training.gpkg;
+  clearing and bare-ground change is reported in the disturbance footprint instead.

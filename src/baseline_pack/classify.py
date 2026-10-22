@@ -8,11 +8,17 @@ SEED = 42
 PROJ = ee.Projection("EPSG:32733").atScale(10)
 
 
-def feature_stack(dry, wet, topo):
-    """All features in one image: both seasons, wet-minus-dry NDVI, elevation, slope."""
+def feature_stack(dry, wet, topo, texture=True):
+    """Both seasons, wet-minus-dry NDVI, terrain, and (optionally) dry-season NDVI texture:
+    local standard deviation in 3x3 and 5x5 pixel windows (smooth = closed canopy, speckled = open bush)."""
     dndvi = wet.select("wet_NDVI").subtract(dry.select("dry_NDVI")).rename("dNDVI")
-    return dry.addBands(wet).addBands(dndvi).addBands(topo).float()
-
+    stack = dry.addBands(wet).addBands(dndvi).addBands(topo)
+    if texture:
+        ndvi10 = dry.select("dry_NDVI").reproject(PROJ)      # fix the grid to 10 m UTM before the window
+        sd3 = ndvi10.reduceNeighborhood(ee.Reducer.stdDev(), ee.Kernel.square(1)).rename("dry_NDVI_sd3")
+        sd5 = ndvi10.reduceNeighborhood(ee.Reducer.stdDev(), ee.Kernel.square(2)).rename("dry_NDVI_sd5")
+        stack = stack.addBands([sd3, sd5])
+    return stack.float()
 
 def prepare_training(gdf, inner_buffer_m=5, holdout_frac=0.3, seed=SEED):
     """Shrink polygons by half a pixel (only fully-interior pixels are sampled), then send whole
@@ -35,15 +41,19 @@ def prepare_training(gdf, inner_buffer_m=5, holdout_frac=0.3, seed=SEED):
     return g
 
 
-def sample_pixels(stack, train_gdf, max_per_class=300, seed=SEED):
-    """All pixels inside the polygons (pts) and a class-balanced subset (balanced)."""
+def sample_pixels(stack, train_gdf, max_per_class=300, max_per_polygon=40, seed=SEED):
+    """All pixels inside the polygons (pts), and a balanced subset: at most max_per_polygon
+    from any single polygon (so no field dominates), then at most max_per_class per class/split."""
     fc = gdf_to_ee(train_gdf[["class_id", "poly_id", "split", "geometry"]])
     pts = stack.sampleRegions(collection=fc, properties=["class_id", "poly_id", "split"],
                               projection=PROJ, tileScale=4).randomColumn("rnd", seed)
+    per_poly = ee.FeatureCollection([
+        pts.filter(ee.Filter.eq("poly_id", int(p))).sort("rnd").limit(max_per_polygon)
+        for p in train_gdf["poly_id"]]).flatten()
     balanced = ee.FeatureCollection([])
     for c in sorted(train_gdf["class_id"].unique().tolist()):
         for split, n in (("train", max_per_class), ("test", max_per_class // 2)):
-            sub = pts.filter(ee.Filter.And(ee.Filter.eq("class_id", c), ee.Filter.eq("split", split)))
+            sub = per_poly.filter(ee.Filter.And(ee.Filter.eq("class_id", c), ee.Filter.eq("split", split)))
             balanced = balanced.merge(sub.sort("rnd").limit(n))
     return pts, balanced
 

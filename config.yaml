@@ -21,11 +21,14 @@ classes:
     name: Bush savanna
     color: '#8bc34a'
   3:
-    name: Grassland / open
+    name: Open land (grass or bare)
     color: '#e8d98a'
   4:
-    name: Bare / disturbed ground
-    color: '#a1795a'
-  5:
     name: Built-up
     color: '#d32f2f'
+label_remap:
+  1: 1
+  2: 2
+  3: 3
+  4: 3
+  5: 4
