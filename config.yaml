@@ -15,10 +15,10 @@ wet_season_months:
 rain_year_start_month: 6
 classes:
   1:
-    name: Dense bush
+    name: Closed woody vegetation
     color: '#1b5e20'
   2:
-    name: Open bush / shrub savanna
+    name: Bush savanna
     color: '#8bc34a'
   3:
     name: Grassland / open

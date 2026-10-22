@@ -5,8 +5,8 @@ judged visually on high-resolution imagery. Height is not distinguished.
 
 | ID | Class | Definition |
 |---|---|---|
-| 1 | Dense bush | Woody canopy >= 40%; crowns mostly touching. Includes scattered taller trees. |
-| 2 | Open bush / shrub savanna | Woody canopy 10-40%; separate shrubs/trees with grass between. |
+| 1 | Closed woody vegetation | Woody canopy >= 70%; crowns nearly continuous, little or no ground visible. Thickets, hill slopes, drainage lines; often includes taller trees. |
+| 2 | Bush savanna | Woody canopy 10-70%; distinct shrubs/trees with ground or grass visible between them. Most encroached rangeland. |
 | 3 | Grassland / open | Woody canopy < 10%; includes cleared blocks now dominated by grass. |
 | 4 | Bare / disturbed ground | Mostly exposed soil or rock: wide gravel tracks, quarries, fresh clearing, construction, dry pan floors. |
 | 5 | Built-up | Buildings, paved surfaces and yards. |
@@ -22,3 +22,9 @@ judged visually on high-resolution imagery. Height is not distinguished.
 - Water: pans are seasonal and dry most of the year; surface water is mapped separately as occurrence (pack item 4).
 - Cropland / irrigated land: none present in the AOI in 2025.
 - Woodland (tall trees) as its own class: not reliably separable from dense bush at 10 m.
+
+## Change log
+- 2026-10-22: Class 1 threshold raised from 40% to 70% (closed woody vegetation) and class 2 widened to 10-70%, to match how training areas were actually interpreted.
+
+## Change log
+- 2026-10-22: Class 1 threshold raised from 40% to 70% (closed woody vegetation) and class 2 widened to 10-70%, to match how training areas were actually interpreted.
