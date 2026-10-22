@@ -30,13 +30,14 @@ def extract_pixels_to_csv(stack, train_gdf, out_csv, name):
 
 
 def balance(df, max_per_polygon=40, max_per_class=300, seed=42):
-    """At most max_per_polygon pixels per polygon, then at most max_per_class (train) / half (test) per class."""
+    """At most max_per_polygon pixels per polygon, then a per-class cap for train (test gets half).
+    max_per_class: one number for all classes, or a dict {class_id: n} to weight dominant classes more."""
     df = df.sample(frac=1, random_state=seed).groupby("poly_id", group_keys=False).head(max_per_polygon)
-    parts = [g.head(max_per_class if s == "train" else max_per_class // 2)
+    cap = (lambda c: max_per_class.get(c, 300)) if isinstance(max_per_class, dict) else (lambda c: max_per_class)
+    parts = [g.head(cap(c) if s == "train" else cap(c) // 2)
              for (c, s), g in df.groupby(["class_id", "split"])]
     return pd.concat(parts).reset_index(drop=True)
-
-
+    
 def to_fc(df, features):
     """Upload a small sample table to Earth Engine (no geometry needed for training)."""
     recs = []
