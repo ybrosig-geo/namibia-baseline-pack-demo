@@ -1,0 +1,6 @@
+,class,blocks_N_h,map_area_ha,weight_W_h,sample_n_h,expected_UA,seed,map,unit
+1,Closed woody vegetation,17583,1582.5,0.0396,53,0.74,20261026,outputs/rasters/landcover_2025_final_v3.tif,30 m block (majority of 3x3)
+2,Bush savanna,317099,28538.9,0.7138,107,0.81,20261026,outputs/rasters/landcover_2025_final_v3.tif,30 m block (majority of 3x3)
+3,Open land (grass or bare),102772,9249.5,0.2314,69,0.77,20261026,outputs/rasters/landcover_2025_final_v3.tif,30 m block (majority of 3x3)
+4,Built-up,6729,605.6,0.0151,51,0.9,20261026,outputs/rasters/landcover_2025_final_v3.tif,30 m block (majority of 3x3)
+5,Water (permanent),39,3.5,0.0001,20,0.9,20261026,outputs/rasters/landcover_2025_final_v3.tif,30 m block (majority of 3x3)
