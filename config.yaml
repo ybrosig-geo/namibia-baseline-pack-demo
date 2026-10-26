@@ -26,6 +26,9 @@ classes:
   4:
     name: Built-up
     color: '#d32f2f'
+  5:
+    name: Water (permanent)
+    color: '#1f78b4'
 label_remap:
   1: 1
   2: 2

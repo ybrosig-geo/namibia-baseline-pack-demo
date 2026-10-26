@@ -91,3 +91,11 @@ def class_area_table(classified, region, names, scale=10):
     df["percent"] = (100 * df["area_ha"] / df["area_ha"].sum()).round(1)
     df["area_ha"] = df["area_ha"].round(1)
     return df.set_index("class")[["class_name", "area_ha", "percent"]]
+
+def apply_water_rule(lc, dry, wet, min_pixels=3, water_class=5):
+    """Permanent water = water-like in BOTH seasonal composites (MNDWI > 0 and NDVI < 0),
+    at least min_pixels connected. Applied after classification; seasonal pans keep their RF class."""
+    water = (dry.select("dry_MNDWI").gt(0).And(dry.select("dry_NDVI").lt(0))
+             .And(wet.select("wet_MNDWI").gt(0)).And(wet.select("wet_NDVI").lt(0))).reproject(PROJ)
+    big = water.selfMask().connectedPixelCount(100, True).gte(min_pixels).unmask(0)
+    return lc.where(water.And(big), water_class).rename("class").toByte()
